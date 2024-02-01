@@ -48,6 +48,40 @@ $status_wise_courses = $this->crud_model->get_status_wise_courses();
 				</ul>
 			</li>
 
+			<li class="side-nav-item <?php if ($page_name == 'grammar' || $page_name == 'lesson') echo 'active'; ?>">
+				<a href="javascript: void(0);" class="side-nav-link <?php if ($page_name == 'grammar' || $page_name == 'lesson') : ?> active <?php endif; ?>">
+					<i class="dripicons-document-edit"></i>
+					<span> Ngữ pháp </span>
+					<span class="menu-arrow"></span>
+				</a>
+				<ul class="side-nav-second-level" aria-expanded="false">
+					<li class="<?php if ( $page_name == 'grammar') echo 'active'; ?>">
+						<a href="<?php echo site_url('admin/grammar'); ?>">Danh mục ngữ pháp</a>
+					</li>
+					<li class="<?php if ( $page_name == 'lesson') echo 'active'; ?>">
+						<a href="<?php echo site_url('admin/grammar_lessons'); ?>">Bài học</a>
+					</li>
+				
+				</ul>
+			</li>
+
+			<li class="side-nav-item <?php if ($page_name == 'vocabulary' || $page_name == 'lesson') echo 'active'; ?>">
+				<a href="javascript: void(0);" class="side-nav-link <?php if ($page_name == 'vocabulary' || $page_name == 'lesson') : ?> active <?php endif; ?>">
+					<i class="dripicons-document-edit"></i>
+					<span> Từ vựng </span>
+					<span class="menu-arrow"></span>
+				</a>
+				<ul class="side-nav-second-level" aria-expanded="false">
+					<li class="<?php if ( $page_name == 'vocabulary') echo 'active'; ?>">
+						<a href="<?php echo site_url('admin/vocabulary'); ?>">Danh mục từ vựng</a>
+					</li>
+					<li class="<?php if ( $page_name == 'lesson') echo 'active'; ?>">
+						<a href="<?php echo site_url('admin/vocabulary_lessons'); ?>">Bài học</a>
+					</li>
+				
+				</ul>
+			</li>
+
 		<?php if (has_permission('course')) : ?>
 			<li class="side-nav-item <?php if ($page_name == 'courses' || $page_name == 'course_add' || $page_name == 'course_edit' || $page_name == 'categories' || $page_name == 'category_add' || $page_name == 'category_edit' || $page_name == 'coupons' || $page_name == 'coupon_add' || $page_name == 'coupon_edit' || $page_name == 'add_bundle' || $page_name == 'manage_course_bundle' || $page_name == 'edit_bundle' || $page_name == 'active_bundle_subscription_report' || $page_name == 'expire_bundle_subscription_report' || $page_name == 'bundle_invoice') echo 'active'; ?>">
 				<a href="javascript: void(0);" class="side-nav-link <?php if ($page_name == 'courses' || $page_name == 'course_add' || $page_name == 'course_edit' || $page_name == 'categories' || $page_name == 'category_add' || $page_name == 'category_edit' || $page_name == 'coupons' || $page_name == 'coupon_add' || $page_name == 'coupon_edit') : ?> active <?php endif; ?>">

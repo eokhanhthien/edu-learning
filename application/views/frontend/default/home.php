@@ -165,25 +165,7 @@
     </div>
 </section> -->
 
-<section class="learn_from_expert">
-    <div class="container-lg">
-        <div class="row">
-            <div class="col-12">
-                <h2 class="course-carousel-title my-4">Học theo chuyên gia</h2>
-                <?php $courseExperts = $this->expert_course_model->getList() ?>
-                <div class="my-3">
-                    <?php if (count($courseExperts) === 0) : ?>
-                        <h4 class="text-center">Không có khóa học nào đang kích hoạt</h4>
-                    <?php else : ?>
-                        <?php $this->load->view('frontend/' . get_frontend_settings('theme') . '/components/learn_from_expert', [
-                            'course_expert' => $courseExperts
-                        ]) ?>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+
 
 <script type="text/javascript">
     function handleWishList(elem) {

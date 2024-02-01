@@ -1,3 +1,81 @@
+<style>
+.dropdown{
+    display:inline-block; 
+    position:relative;
+  }
+
+  .dropdown button{
+    border:none;
+    padding:8px 16px;
+    background-color:transparent;
+    color:#fff;
+    transition:.3s;
+    cursor:pointer;
+    height: 100%;
+  }
+  
+  .dropdown:hover button{
+    background-color:mediumSeaGreen;
+  }
+.dropdown:hover{
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+  .dropdown > div{
+    background-color:#fff;
+    z-index:1;
+    visibility:hidden;
+    position:absolute;
+    min-width:100%;
+    opacity:0;
+    transition:.3s;
+  }
+.dropdown .submenu{
+  position:relative;
+}
+ .dropdown .submenu > div{
+   background-color:#fff;
+  visibility:hidden;
+   position:absolute;
+   left:100%;
+   top:0;
+   transition:.3s;
+   opacity:0;
+}
+/*use the following commented class if you wanna show submenu at left*/
+/*
+.dropdown .submenu.atLeft > div{
+  left:-100%;
+}
+*/
+ .dropdown .submenu:hover > div{
+  visibility:visible;
+   opacity:1;
+}
+
+  .dropdown:hover > div{
+    visibility:visible;
+    opacity:1;
+  }
+
+  .dropdown a{
+    display:block;
+    text-decoration:none;
+    padding:8px;
+    color:#000;
+    transition:.1s;
+    white-space:nowrap;
+  }
+  
+  .dropdown a:hover,.dropdown .submenu:hover > a{
+    background-color:mediumSeaGreen;
+    color:#fff;
+  }
+</style>
+<?php 
+// Lấy danh sách grammar
+$grammars = $this->db->get('grammars')->result_array();
+$vocabulary = $this->db->get('vocabulary')->result_array();
+?>
 <section class="menu-area">
   <div class="container-xl p-0">
     <div class="row pl-2 pr-2">
@@ -57,15 +135,51 @@
     <ul>
       <li><a href="<?=site_url('de-thi'); ?>">Đề thi</a></li>
       <!-- <li><a href="<?=site_url('cam-nhan-hoc-vien'); ?>">Cảm nhận học viên</a></li> -->
-      <li><a href="#">Tin học văn phòng</a></li>
-      <li><a href="#">Ngoại ngữ</a></li>
-      <li><a href="#">Thiết kế</a></li>
-      <li><a href="#">Marketing</a></li>
-      <li><a href="#">Business</a></li>
-      <li><a href="#">Lập trình</a></li>
-      <li><a href="#">Kế toán</a></li>
-      <li><a href="#">Tài chính</a></li>
-      <li><a href="#">Xây dựng</a></li>
+      <!-- thêm drop down -->
+  <div class="dropdown">
+  <button>Ngữ pháp</button>
+  <div >
+    <?php if (!empty($grammars)) : ?>
+          <?php foreach ($grammars as $grammar) : ?>
+            <?php if ($grammar['parent_id'] == 0) : ?>
+              <div class="submenu">
+                <a href="#"><?= $grammar['name']; ?></a>
+                  <div >
+                  <?php foreach ($grammars as $grammar_child) : ?>
+                      <?php if ($grammar_child['parent_id'] == $grammar['id']) : ?>
+                        <a href="<?= site_url('/danh-sach-bai-hoc/' . $grammar_child['id']); ?>"><?= $grammar_child['name']; ?></a>
+                      <?php endif; ?>
+                  <?php endforeach; ?>    
+                  </div>
+                </div>
+            <?php endif; ?>
+          <?php endforeach; ?>
+    <?php endif; ?>
+  </div>
+</div>
+
+<div class="dropdown">
+  <button>Từ vựng</button>
+  <div >
+    <?php if (!empty($vocabulary)) : ?>
+          <?php foreach ($vocabulary as $item) : ?>
+            <?php if ($item['parent_id'] == 0) : ?>
+              <div class="submenu">
+                <a href="#"><?= $item['name']; ?></a>
+                  <div >
+                  <?php foreach ($vocabulary as $item_child) : ?>
+                      <?php if ($item_child['parent_id'] == $item['id']) : ?>
+                        <a href="<?= site_url('/danh-sach-tu-vung/' . $item_child['id']); ?>"><?= $item_child['name']; ?></a>
+                      <?php endif; ?>
+                  <?php endforeach; ?>    
+                  </div>
+                </div>
+            <?php endif; ?>
+          <?php endforeach; ?>
+    <?php endif; ?>
+  </div>
+</div>
+    
     </ul>
   </div>
 </section>

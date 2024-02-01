@@ -56,6 +56,10 @@ $route['home/bai-viet/(:any)/(:any)']                        = "home/bai_viet/$2
 $route['danh-muc/(:any)/(:any)']                        = "home/dang_muc/$2";
 $route['de-thi']                        = "home/de_thi";
 $route['de-thi/(:any)']                        = "home/de_thi/$1";
+$route['bai-hoc-ngu-phap/(:any)']                        = "home/bai_hoc_ngu_phap/$1";
+$route['danh-sach-bai-hoc/(:any)']                        = "home/danh_sach_bai_hoc/$1";
+$route['danh-sach-tu-vung/(:any)']                        = "home/danh_sach_tu_vung/$1";
+$route['bai-hoc-tu-vung/(:any)']                        = "home/bai_hoc_tu_vung/$1";
 
 //course bundles
 $route['course_bundles/(:any)']                                = "addons/course_bundles/index/$1";

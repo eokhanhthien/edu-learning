@@ -51,6 +51,51 @@ class Home extends CI_Controller
 		
 	}
 
+// bai_hoc_ngu_phap
+	public function bai_hoc_ngu_phap($id = ""){
+		// Lấy grammar_lessons theo id
+		$grammar_lesson = $this->crud_model->get_grammar_lesson_details_by_id($id)->row_array();
+		// print_r($grammar_lesson);exit;
+		$page_data['page_name'] = "grammar_lesson";
+		$page_data['grammar_lesson_details'] = $grammar_lesson;
+		$page_data['page_title'] = $grammar_lesson['name'];
+		$this->load->view('frontend/' . get_frontend_settings('theme') . '/index', $page_data);
+		
+	}
+
+	public function danh_sach_bai_hoc($id = ""){
+		// Lấy grammar_lessons theo slug
+		$grammar_lesson = $this->crud_model->get_grammar_lessons_by_grammar_id($id);
+		$grammar = $this->crud_model->get_grammar_by_id($id)->row_array();
+		// print_r($grammar_lesson);exit;
+		$page_data['page_name'] = "list_lesson";
+		$page_data['list_lesson'] = $grammar_lesson;
+		$page_data['page_title'] = $grammar['name'];
+		$this->load->view('frontend/' . get_frontend_settings('theme') . '/index', $page_data);
+	}
+
+	public function danh_sach_tu_vung($id = ""){
+		// Lấy grammar_lessons theo slug
+		$vocabulary_lesson = $this->crud_model->get_vocabulary_lessons_by_vocabulary_id($id);
+		$vocabulary = $this->crud_model->get_vocabulary_by_id($id)->row_array();
+		// print_r($vocabulary_lesson);exit;
+		$page_data['page_name'] = "list_vocabulary";
+		$page_data['list_lesson'] = $vocabulary_lesson;
+		$page_data['page_title'] = $vocabulary['name'];
+		$this->load->view('frontend/' . get_frontend_settings('theme') . '/index', $page_data);
+	}
+
+	public function bai_hoc_tu_vung($id = ""){
+		// Lấy vocabulary_lessons theo id
+		$vocabulary_lesson = $this->crud_model->get_vocabulary_lesson_details_by_id($id)->row_array();
+		// print_r($vocabulary_lesson);exit;
+		$page_data['page_name'] = "vocabulary_lesson";
+		$page_data['vocabulary_lesson_details'] = $vocabulary_lesson;
+		$page_data['page_title'] = $vocabulary_lesson['name'];
+		$this->load->view('frontend/' . get_frontend_settings('theme') . '/index', $page_data);
+		
+	}
+
 	public function verification_code()
 	{
 		if (!$this->session->userdata('register_email')) {

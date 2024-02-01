@@ -47,7 +47,7 @@ class Admin extends CI_Controller
 			} else {
 				$this->session->set_flashdata('error_message', get_phrase('category_name_already_exists'));
 			}
-			redirect(site_url('admin/categories'), 'refresh');
+			// redirect(site_url('admin/categories'), 'refresh');
 		} elseif ($param1 == "edit") {
 
 			$response = $this->crud_model->edit_category($param2);
@@ -195,7 +195,267 @@ class Admin extends CI_Controller
 		$this->load->view('backend/index', $page_data);
 	}
 
+	// xử lý các phương thức
+	public function grammar($param1 = "", $param2 = "")
+	{
+		if ($this->session->userdata('admin_login') != true) {
+			redirect(site_url('login'), 'refresh');
+		}
 
+		// CHECK ACCESS PERMISSION
+		// check_permission('category');
+
+		if ($param1 == 'add') {
+
+			$response = $this->crud_model->add_grammar();
+			if ($response) {
+				$this->session->set_flashdata('flash_message', get_phrase('data_added_successfully'));
+			} else {
+				$this->session->set_flashdata('error_message', get_phrase('category_name_already_exists'));
+			}
+			redirect(site_url('admin/grammar'), 'refresh');
+		} elseif ($param1 == "edit") {
+
+			$response = $this->crud_model->edit_grammar($param2);
+			if ($response) {
+				$this->session->set_flashdata('flash_message', get_phrase('data_added_successfully'));
+			} else {
+				$this->session->set_flashdata('error_message', get_phrase('category_name_already_exists'));
+			}
+			redirect(site_url('admin/grammar'), 'refresh');
+		} elseif ($param1 == "delete") {
+
+			$this->crud_model->delete_grammar($param2);
+			$this->session->set_flashdata('flash_message', get_phrase('data_deleted'));
+			redirect(site_url('admin/grammar'), 'refresh');
+		}
+		$page_data['page_name'] = 'grammar';
+		$page_data['page_title'] = 'Danh mục ngữ pháp';
+		$page_data['categories'] = $this->crud_model->get_grammar($param2);
+		$this->load->view('backend/index', $page_data);
+	}
+
+	// Xử lý view
+	public function grammar_form($param1 = "", $param2 = "")
+	{
+		if ($this->session->userdata('admin_login') != true) {
+			redirect(site_url('login'), 'refresh');
+		}
+
+		// CHECK ACCESS PERMISSION
+		// check_permission('category');
+
+		if ($param1 == "add_grammar") {
+
+			$page_data['page_name'] = 'grammar_add';
+			$page_data['page_title'] = get_phrase('add_grammar');
+		}
+		if ($param1 == "edit_grammar") {
+
+			$page_data['page_name'] = 'grammar_edit';
+			$page_data['page_title'] = get_phrase('edit_grammar');
+			$page_data['grammar_id'] = $param2;
+		}
+
+		$this->load->view('backend/index', $page_data);
+	}
+
+
+	public function grammar_lessons($param1 = "", $param2 = "")
+	{
+		if ($this->session->userdata('admin_login') != true) {
+			redirect(site_url('login'), 'refresh');
+		}
+
+		// CHECK ACCESS PERMISSION
+		// check_permission('category');
+
+		if ($param1 == 'add') {
+
+			$response = $this->crud_model->add_grammar_lessons();
+			if ($response) {
+				$this->session->set_flashdata('flash_message', get_phrase('data_added_successfully'));
+			} else {
+				$this->session->set_flashdata('error_message', get_phrase('category_name_already_exists'));
+			}
+			redirect(site_url('admin/grammar_lessons'), 'refresh');
+		} elseif ($param1 == "edit") {
+
+			$response = $this->crud_model->edit_grammar_lessons($param2);
+			if ($response) {
+				$this->session->set_flashdata('flash_message', get_phrase('data_added_successfully'));
+			} else {
+				$this->session->set_flashdata('error_message', get_phrase('category_name_already_exists'));
+			}
+			redirect(site_url('admin/grammar_lessons'), 'refresh');
+		} elseif ($param1 == "delete") {
+
+			$this->crud_model->delete_grammar_lesson($param2);
+			$this->session->set_flashdata('flash_message', get_phrase('data_deleted'));
+			redirect(site_url('admin/grammar_lesson'), 'refresh');
+		}
+		$page_data['page_name'] = 'grammar_lessons';
+		$page_data['page_title'] = 'Bài học';
+		$page_data['categories'] = $this->crud_model->get_grammar_lesson($param2);
+		$this->load->view('backend/index', $page_data);
+	}
+
+	// grammar_lessons_form
+	public function grammar_lessons_form($param1 = "", $param2 = "")
+	{
+		if ($this->session->userdata('admin_login') != true) {
+
+			redirect(site_url('login'), 'refresh');
+		}
+
+		// CHECK ACCESS PERMISSION
+		// check_permission('category');
+
+		if ($param1 == "add_grammar_lesson") {
+
+			$page_data['page_name'] = 'grammar_lesson_add';
+			$page_data['page_title'] = get_phrase('add_grammar_lesson');
+		}
+		if ($param1 == "edit_grammar_lesson") {
+
+			$page_data['page_name'] = 'grammar_lesson_edit';
+			$page_data['page_title'] = get_phrase('edit_grammar_lesson');
+			$page_data['grammar_lesson_id'] = $param2;
+		}
+
+		$this->load->view('backend/index', $page_data);
+	}
+
+	// Từ vựng
+	// xử lý các phương thức
+	public function vocabulary($param1 = "", $param2 = "")
+	{
+		if ($this->session->userdata('admin_login') != true) {
+			redirect(site_url('login'), 'refresh');
+		}
+
+		// CHECK ACCESS PERMISSION
+		// check_permission('category');
+
+		if ($param1 == 'add') {
+
+			$response = $this->crud_model->add_vocabulary();
+			if ($response) {
+				$this->session->set_flashdata('flash_message', get_phrase('data_added_successfully'));
+			} else {
+				$this->session->set_flashdata('error_message', get_phrase('category_name_already_exists'));
+			}
+			redirect(site_url('admin/vocabulary'), 'refresh');
+		} elseif ($param1 == "edit") {
+
+			$response = $this->crud_model->edit_vocabulary($param2);
+			if ($response) {
+				$this->session->set_flashdata('flash_message', get_phrase('data_added_successfully'));
+			} else {
+				$this->session->set_flashdata('error_message', get_phrase('category_name_already_exists'));
+			}
+			redirect(site_url('admin/vocabulary'), 'refresh');
+		} elseif ($param1 == "delete") {
+
+			$this->crud_model->delete_vocabulary($param2);
+			$this->session->set_flashdata('flash_message', get_phrase('data_deleted'));
+			redirect(site_url('admin/vocabulary'), 'refresh');
+		}
+		$page_data['page_name'] = 'vocabulary';
+		$page_data['page_title'] = 'Danh mục ngữ pháp';
+		$page_data['categories'] = $this->crud_model->get_vocabulary($param2);
+		$this->load->view('backend/index', $page_data);
+	}
+
+	// Xử lý view
+	public function vocabulary_form($param1 = "", $param2 = "")
+	{
+		if ($this->session->userdata('admin_login') != true) {
+			redirect(site_url('login'), 'refresh');
+		}
+
+		// CHECK ACCESS PERMISSION
+		// check_permission('category');
+
+		if ($param1 == "add_vocabulary") {
+
+			$page_data['page_name'] = 'vocabulary_add';
+			$page_data['page_title'] = get_phrase('add_vocabulary');
+		}
+		if ($param1 == "edit_vocabulary") {
+
+			$page_data['page_name'] = 'vocabulary_edit';
+			$page_data['page_title'] = get_phrase('edit_vocabulary');
+			$page_data['vocabulary_id'] = $param2;
+		}
+
+		$this->load->view('backend/index', $page_data);
+	}
+
+	public function vocabulary_lessons($param1 = "", $param2 = "")
+	{
+		if ($this->session->userdata('admin_login') != true) {
+			redirect(site_url('login'), 'refresh');
+		}
+
+		// CHECK ACCESS PERMISSION
+		// check_permission('category');
+
+		if ($param1 == 'add') {
+
+			$response = $this->crud_model->add_vocabulary_lessons();
+			if ($response) {
+				$this->session->set_flashdata('flash_message', get_phrase('data_added_successfully'));
+			} else {
+				$this->session->set_flashdata('error_message', get_phrase('category_name_already_exists'));
+			}
+			redirect(site_url('admin/vocabulary_lessons'), 'refresh');
+		} elseif ($param1 == "edit") {
+
+			$response = $this->crud_model->edit_vocabulary_lessons($param2);
+			if ($response) {
+				$this->session->set_flashdata('flash_message', get_phrase('data_added_successfully'));
+			} else {
+				$this->session->set_flashdata('error_message', get_phrase('category_name_already_exists'));
+			}
+			redirect(site_url('admin/vocabulary_lessons'), 'refresh');
+		} elseif ($param1 == "delete") {
+
+			$this->crud_model->delete_vocabulary_lesson($param2);
+			$this->session->set_flashdata('flash_message', get_phrase('data_deleted'));
+			redirect(site_url('admin/vocabulary_lesson'), 'refresh');
+		}
+		$page_data['page_name'] = 'vocabulary_lessons';
+		$page_data['page_title'] = 'Bài học';
+		$page_data['categories'] = $this->crud_model->get_vocabulary_lesson($param2);
+		$this->load->view('backend/index', $page_data);
+	}
+
+	// vocabulary_lessons_form
+	public function vocabulary_lessons_form($param1 = "", $param2 = "")
+	{
+		if ($this->session->userdata('admin_login') != true) {
+
+			redirect(site_url('login'), 'refresh');
+		}
+
+		// CHECK ACCESS PERMISSION
+		// check_permission('category');
+
+		if ($param1 == "add_vocabulary_lesson") {
+
+			$page_data['page_name'] = 'vocabulary_lesson_add';
+			$page_data['page_title'] = get_phrase('add_vocabulary_lesson');
+		}
+		if ($param1 == "edit_vocabulary_lesson") {
+
+			$page_data['page_name'] = 'vocabulary_lesson_edit';
+			$page_data['page_title'] = get_phrase('edit_vocabulary_lesson');
+			$page_data['vocabulary_lesson_id'] = $param2;
+		}
+
+		$this->load->view('backend/index', $page_data);
+	}
 	public function exam_form($param1 = "", $param2 = "")
 	{
 		if ($this->session->userdata('admin_login') != true) {

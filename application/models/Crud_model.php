@@ -88,12 +88,359 @@ class Crud_model extends CI_Model
 			}
 			$data['date_added'] = strtotime(date('D, d-M-Y'));
 			$this->db->insert('category', $data);
+			if (!$this->db->insert('category', $data)) {
+				echo $this->db->error()['message'];exit;
+			}
 			return true;
 		}
 
 		return false;
 	}
 
+	public function get_grammar($param1 = "")
+	{
+		if ($param1 != "") {
+			$this->db->where('id', $param1);
+		}
+		return $this->db->get('grammars');
+	}
+
+	public function add_grammar()
+	{
+		$data['code']   = html_escape($this->input->post('code'));
+		$data['name']   = html_escape($this->input->post('name'));
+		$data['slug'] = slugify($data['name']);
+		$data['parent_id'] = html_escape($this->input->post('parent_id'));
+
+		// CHECK IF THE CATEGORY NAME ALREADY EXISTS
+		$this->db->where('name', $data['name']);
+		$this->db->or_where('slug', $data['slug']);
+		$previous_data = $this->db->get('grammars')->num_rows();
+
+		if ($previous_data == 0) {
+			$data['date_added'] = strtotime(date('D, d-M-Y'));
+			$this->db->insert('grammars', $data);
+			return true;
+		}
+
+		return false;
+	}
+
+	public function get_child_grammars() {
+		$this->db->where('parent_id !=', 0);
+		return $this->db->get('grammars')->result_array();
+	}
+	public function get_parent_grammars() {
+		$this->db->where('parent_id =', 0);
+		return $this->db->get('grammars')->result_array();
+	}
+	// edit_grammar
+	public function edit_grammar($param1)
+	{
+		$data['name']   = html_escape($this->input->post('name'));
+		$data['slug'] = slugify($data['name']);
+		$data['parent_id'] = html_escape($this->input->post('parent_id'));
+
+		// CHECK IF THE CATEGORY NAME ALREADY EXISTS
+		$this->db->where('name', $data['name']);
+		$this->db->or_where('slug', $data['slug']);
+		$previous_data = $this->db->get('grammars')->result_array();
+
+		$checker = true;
+		foreach ($previous_data as $row) {
+			if ($row['id'] != $param1) {
+				$checker = false;
+				break;
+			}
+		}
+
+		if ($checker) {
+			$data['last_modified'] = strtotime(date('D, d-M-Y'));
+			$this->db->where('id', $param1);
+			$this->db->update('grammars', $data);
+
+			return true;
+		}
+		return false;
+	}
+
+	// get_grammar_details_by_id
+	public function get_grammar_details_by_id($id)
+	{
+		return $this->db->get_where('grammars', array('id' => $id));
+	}
+
+	// delete_grammar
+	public function delete_grammar($grammar_id)
+	{
+		$this->db->where('id', $grammar_id);
+		$this->db->delete('grammars');
+	}
+
+	function slugify($text) {
+		$text = preg_replace('/[^\p{Latin}a-zA-Z0-9]/u', ' ', $text); // Thay '-' bằng khoảng trắng
+		$text = preg_replace('/\s+/', '-', $text); // Chuyển khoảng trắng thành dấu gạch ngang
+		$text = strtolower($text);
+		$text = trim($text, '-');
+		return $text;
+	}
+	
+	
+
+
+	public function get_grammar_lesson($param1 = "")
+	{
+		if ($param1 != "") {
+			$this->db->where('id', $param1);
+		}
+		return $this->db->get('grammar_lessons');
+	}
+
+	// add_grammar_lesson
+	public function add_grammar_lessons()
+	{
+		$data['name']   = html_escape($this->input->post('name'));
+		$data['slug'] = slugify($data['name']);
+		$data['grammar_id'] = html_escape($this->input->post('grammar_id'));
+		$data['content'] = html_escape($this->input->post('content'));
+		$data['lesson_number'] = html_escape($this->input->post('lesson_number'));
+		$data['code'] = html_escape($this->input->post('code'));
+
+		// CHECK IF THE CATEGORY NAME ALREADY EXISTS
+		$this->db->where('name', $data['name']);
+		$this->db->or_where('slug', $data['slug']);
+		$previous_data = $this->db->get('grammar_lessons')->num_rows();
+
+		if ($previous_data == 0) {
+			$data['date_added'] = strtotime(date('D, d-M-Y'));
+			$this->db->insert('grammar_lessons', $data);
+			return true;
+		}
+
+		return false;
+	}
+
+	// edit_grammar_lesson
+	public function edit_grammar_lessons($param1)
+	{
+		$data['name']   = html_escape($this->input->post('name'));
+		$data['slug'] = slugify($data['name']);
+		$data['grammar_id'] = html_escape($this->input->post('grammar_id'));
+		$data['content'] = html_escape($this->input->post('content'));
+		$data['lesson_number'] = html_escape($this->input->post('lesson_number'));
+		$data['code'] = html_escape($this->input->post('code'));
+
+		// CHECK IF THE CATEGORY NAME ALREADY EXISTS
+		// $this->db->where('name', $data['name']);
+		// $this->db->or_where('slug', $data['slug']);
+		// $previous_data = $this->db->get('grammar_lessons')->num_rows();
+
+		// if ($previous_data == 0) {
+			$data['date_added'] = strtotime(date('D, d-M-Y'));
+			$this->db->where('id', $param1);
+			$this->db->update('grammar_lessons', $data);
+			return true;
+		// }
+
+		return false;
+		
+	}
+
+	//  get grammar_lesson_details_by_slug
+	public function get_grammar_lesson_details_by_slug($slug)
+	{
+		return $this->db->get_where('grammar_lessons', array('slug' => $slug));
+	}
+
+	// get_grammar_lesson_details_by_id
+	public function get_grammar_lesson_details_by_id($id)
+	{
+		return $this->db->get_where('grammar_lessons', array('id' => $id));
+	}
+
+	//get_grammar_lessons_by_grammar_id
+	public function get_grammar_lessons_by_grammar_id($grammar_id)
+	{
+		$this->db->where('grammar_id', $grammar_id);
+		$this->db->order_by('lesson_number', 'ASC'); // Sắp xếp theo trường lesson_number tăng dần
+		return $this->db->get('grammar_lessons')->result();
+	}
+
+	// get_grammar_by_id
+	public function get_grammar_by_id($id)
+	{
+		return $this->db->get_where('grammars', array('id' => $id));
+	}
+
+
+	// Từ vựng
+	public function get_vocabulary($param1 = "")
+	{
+		if ($param1 != "") {
+			$this->db->where('id', $param1);
+		}
+		return $this->db->get('vocabulary');
+	}
+
+	public function add_vocabulary()
+	{
+		$data['code']   = html_escape($this->input->post('code'));
+		$data['name']   = html_escape($this->input->post('name'));
+		$data['slug'] = slugify($data['name']);
+		$data['parent_id'] = html_escape($this->input->post('parent_id'));
+
+		// CHECK IF THE CATEGORY NAME ALREADY EXISTS
+		$this->db->where('name', $data['name']);
+		$this->db->or_where('slug', $data['slug']);
+		$previous_data = $this->db->get('vocabulary')->num_rows();
+
+		if ($previous_data == 0) {
+			$data['date_added'] = strtotime(date('D, d-M-Y'));
+			$this->db->insert('vocabulary', $data);
+			return true;
+		}
+
+		return false;
+	}
+
+	public function get_child_vocabulary() {
+		$this->db->where('parent_id !=', 0);
+		return $this->db->get('vocabulary')->result_array();
+	}
+	public function get_parent_vocabulary() {
+		$this->db->where('parent_id =', 0);
+		return $this->db->get('vocabulary')->result_array();
+	}
+	// edit_vocabulary
+	public function edit_vocabulary($param1)
+	{
+		$data['name']   = html_escape($this->input->post('name'));
+		$data['slug'] = slugify($data['name']);
+		$data['parent_id'] = html_escape($this->input->post('parent_id'));
+
+		// CHECK IF THE CATEGORY NAME ALREADY EXISTS
+		$this->db->where('name', $data['name']);
+		$this->db->or_where('slug', $data['slug']);
+		$previous_data = $this->db->get('vocabulary')->result_array();
+
+		$checker = true;
+		foreach ($previous_data as $row) {
+			if ($row['id'] != $param1) {
+				$checker = false;
+				break;
+			}
+		}
+
+		if ($checker) {
+			$data['last_modified'] = strtotime(date('D, d-M-Y'));
+			$this->db->where('id', $param1);
+			$this->db->update('vocabulary', $data);
+
+			return true;
+		}
+		return false;
+	}
+
+	// get_vocabulary_details_by_id
+	public function get_vocabulary_details_by_id($id)
+	{
+		return $this->db->get_where('vocabulary', array('id' => $id));
+	}
+
+	// delete_vocabulary
+	public function delete_vocabulary($vocabulary_id)
+	{
+		$this->db->where('id', $vocabulary_id);
+		$this->db->delete('vocabulary');
+	}
+
+
+	
+
+
+	public function get_vocabulary_lesson($param1 = "")
+	{
+		if ($param1 != "") {
+			$this->db->where('id', $param1);
+		}
+		return $this->db->get('vocabulary_lessons');
+	}
+
+	// add_vocabulary_lesson
+	public function add_vocabulary_lessons()
+	{
+		$data['name']   = html_escape($this->input->post('name'));
+		$data['slug'] = slugify($data['name']);
+		$data['vocabulary_id'] = html_escape($this->input->post('vocabulary_id'));
+		$data['content'] = html_escape($this->input->post('content'));
+		$data['lesson_number'] = html_escape($this->input->post('lesson_number'));
+		$data['code'] = html_escape($this->input->post('code'));
+
+		// CHECK IF THE CATEGORY NAME ALREADY EXISTS
+		$this->db->where('name', $data['name']);
+		$this->db->or_where('slug', $data['slug']);
+		$previous_data = $this->db->get('vocabulary_lessons')->num_rows();
+
+		if ($previous_data == 0) {
+			$data['date_added'] = strtotime(date('D, d-M-Y'));
+			$this->db->insert('vocabulary_lessons', $data);
+			return true;
+		}
+
+		return false;
+	}
+
+	// edit_vocabulary_lesson
+	public function edit_vocabulary_lessons($param1)
+	{
+		$data['name']   = html_escape($this->input->post('name'));
+		$data['slug'] = slugify($data['name']);
+		$data['vocabulary_id'] = html_escape($this->input->post('vocabulary_id'));
+		$data['content'] = html_escape($this->input->post('content'));
+		$data['lesson_number'] = html_escape($this->input->post('lesson_number'));
+		$data['code'] = html_escape($this->input->post('code'));
+
+		// CHECK IF THE CATEGORY NAME ALREADY EXISTS
+		// $this->db->where('name', $data['name']);
+		// $this->db->or_where('slug', $data['slug']);
+		// $previous_data = $this->db->get('vocabulary_lessons')->num_rows();
+
+		// if ($previous_data == 0) {
+			$data['date_added'] = strtotime(date('D, d-M-Y'));
+			$this->db->where('id', $param1);
+			$this->db->update('vocabulary_lessons', $data);
+			return true;
+		// }
+
+		return false;
+		
+	}
+
+	//  get vocabulary_lesson_details_by_slug
+	public function get_vocabulary_lesson_details_by_slug($slug)
+	{
+		return $this->db->get_where('vocabulary_lessons', array('slug' => $slug));
+	}
+
+	// get_vocabulary_lesson_details_by_id
+	public function get_vocabulary_lesson_details_by_id($id)
+	{
+		return $this->db->get_where('vocabulary_lessons', array('id' => $id));
+	}
+
+	//get_vocabulary_lessons_by_vocabulary_id
+	public function get_vocabulary_lessons_by_vocabulary_id($vocabulary_id)
+	{
+		$this->db->where('vocabulary_id', $vocabulary_id);
+		$this->db->order_by('lesson_number', 'ASC'); // Sắp xếp theo trường lesson_number tăng dần
+		return $this->db->get('vocabulary_lessons')->result();
+	}
+
+	// get_vocabulary_by_id
+	public function get_vocabulary_by_id($id)
+	{
+		return $this->db->get_where('vocabulary', array('id' => $id));
+	}
 	public function add_exam_categories()
 	{
 		$data['code']   = html_escape($this->input->post('code'));
